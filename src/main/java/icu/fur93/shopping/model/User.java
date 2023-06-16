@@ -1,7 +1,5 @@
 package icu.fur93.shopping.model;
 
-import java.math.BigDecimal;
-
 public class User {
     public int id;
     public String username;

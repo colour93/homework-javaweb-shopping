@@ -1,9 +1,7 @@
 package icu.fur93.shopping;
 
 import icu.fur93.shopping.model.Cart;
-import icu.fur93.shopping.model.Comment;
 import icu.fur93.shopping.model.Product;
-import icu.fur93.shopping.model.User;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -30,7 +28,7 @@ public class CartDAO {
         return null;
     }
 
-    public static boolean addCartItem(int userId, int productId) {
+    public static void addCartItem(int userId, int productId) {
         try {
             Connection conn = DBUtil.getConnection();
 
@@ -39,16 +37,14 @@ public class CartDAO {
             stmt.setInt(2, productId);
 
             // 通过影响行数判断执行成功失败
-            int rowsAffected = stmt.executeUpdate();
-            return (rowsAffected != 0);
+//            int rowsAffected = stmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
-    public static boolean deleteCartItem(int cartId) {
+    public static void deleteCartItem(int cartId) {
         try {
             Connection conn = DBUtil.getConnection();
 
@@ -56,13 +52,11 @@ public class CartDAO {
             stmt.setInt(1, cartId);
 
             // 通过影响行数判断执行成功失败
-            int rowsAffected = stmt.executeUpdate();
-            return (rowsAffected != 0);
+//            int rowsAffected = stmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     static List<Cart> covertResultSet(ResultSet rs) throws SQLException {

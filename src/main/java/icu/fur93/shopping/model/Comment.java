@@ -1,6 +1,4 @@
 package icu.fur93.shopping.model;
-
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class Comment {

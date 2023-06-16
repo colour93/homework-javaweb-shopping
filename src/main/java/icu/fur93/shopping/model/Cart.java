@@ -1,7 +1,5 @@
 package icu.fur93.shopping.model;
 
-import java.math.BigDecimal;
-
 public class Cart {
     public int id;
     public int product_id;
