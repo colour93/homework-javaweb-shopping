@@ -13,53 +13,76 @@ import java.util.List;
 
 public class CartDAO {
 
+    /**
+     * 获取指定用户的购物车中的所有商品
+     * @param userId 用户ID
+     * @return 购物车中的商品列表
+     */
     public static List<Cart> getAllCartItems(int userId) {
         try {
             Connection conn = DBUtil.getConnection();
 
+            // 查询用户购物车中的商品信息
             PreparedStatement stmt = conn.prepareStatement("SELECT p.*, c.* FROM carts c JOIN products p ON c.product_id = p.id  WHERE c.user_id = ? ORDER BY c.id DESC;");
             stmt.setInt(1, userId);
 
             ResultSet rs = stmt.executeQuery();
-            return covertResultSet(rs);
+            return convertResultSet(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * 向购物车中添加商品
+     * @param userId 用户ID
+     * @param productId 商品ID
+     */
     public static void addCartItem(int userId, int productId) {
         try {
             Connection conn = DBUtil.getConnection();
 
+            // 向购物车中插入商品
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO `carts` (`user_id`, `product_id`) VALUES (?, ?)");
             stmt.setInt(1, userId);
             stmt.setInt(2, productId);
 
-            // 通过影响行数判断执行成功失败
-//            int rowsAffected = stmt.executeUpdate();
+            // 执行插入操作
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 删除购物车中的商品
+     * @param cartId 购物车项ID
+     */
     public static void deleteCartItem(int cartId) {
         try {
             Connection conn = DBUtil.getConnection();
 
+            // 删除购物车中的商品
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM carts WHERE id = ?");
             stmt.setInt(1, cartId);
 
-            // 通过影响行数判断执行成功失败
-//            int rowsAffected = stmt.executeUpdate();
+            // 执行删除操作
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    static List<Cart> covertResultSet(ResultSet rs) throws SQLException {
+    /**
+     * 将ResultSet转换为商品列表
+     * @param rs ResultSet对象
+     * @return 商品列表
+     * @throws SQLException
+     */
+    static List<Cart> convertResultSet(ResultSet rs) throws SQLException {
         List<Cart> productList = new ArrayList<>();
         while (rs.next()) {
             int id = rs.getInt("c.id");

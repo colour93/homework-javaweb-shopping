@@ -10,9 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+
+    /**
+     * 用户登录验证
+     * @param username 用户名
+     * @param password 密码
+     * @return 验证成功返回用户对象，验证失败返回null
+     */
     public static User login(String username, String password) {
         try {
-
             Connection conn = DBUtil.getConnection();
 
             // 使用 prepare statement 来避免注入
@@ -21,7 +27,7 @@ public class UserDAO {
             stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
-            List<User> userList = covertResultSet(rs);
+            List<User> userList = convertResultSet(rs);
 
             // 如果列表没有数据，那就说明用户名密码不匹配
             if (userList.size() == 0) return null;
@@ -33,6 +39,12 @@ public class UserDAO {
         return null;
     }
 
+    /**
+     * 用户注册
+     * @param username 用户名
+     * @param password 密码
+     * @return 注册成功返回用户对象，注册失败返回null
+     */
     public static User register(String username, String password) {
         try {
             Connection conn = DBUtil.getConnection();
@@ -49,7 +61,7 @@ public class UserDAO {
             stmt1.setString(1, username);
 
             ResultSet rs = stmt1.executeQuery();
-            List<User> userList = covertResultSet(rs);
+            List<User> userList = convertResultSet(rs);
 
             // 如果列表没有数据，那就说明用户不存在
             if (userList.size() == 0) return null;
@@ -61,9 +73,13 @@ public class UserDAO {
         return null;
     }
 
+    /**
+     * 根据用户ID获取用户信息
+     * @param userId 用户ID
+     * @return 用户对象，如果用户不存在则返回null
+     */
     public static User getUserById(int userId) {
         try {
-
             Connection conn = DBUtil.getConnection();
 
             // 使用 prepare statement 来避免注入
@@ -71,7 +87,7 @@ public class UserDAO {
             stmt.setInt(1, userId);
 
             ResultSet rs = stmt.executeQuery();
-            List<User> userList = covertResultSet(rs);
+            List<User> userList = convertResultSet(rs);
 
             // 如果列表没有数据，那就说明用户不存在
             if (userList.size() == 0) return null;
@@ -83,8 +99,13 @@ public class UserDAO {
         return null;
     }
 
-    // 将 ORM 部分抽象出来
-    static List<User> covertResultSet(ResultSet rs) throws SQLException {
+    /**
+     * 将ResultSet转换为用户列表
+     * @param rs ResultSet对象
+     * @return 用户列表
+     * @throws SQLException
+     */
+    static List<User> convertResultSet(ResultSet rs) throws SQLException {
         List<User> userList = new ArrayList<>();
         while (rs.next()) {
             int id = rs.getInt("id");
